@@ -1,4 +1,4 @@
-folder = "/images/"
+folder = "/Users/jack/Github/cst205proj1/images/"
 
 pictures = []
 
@@ -21,6 +21,27 @@ pictures.append(image8)
 image9 = makePicture(folder+"9.png")
 pictures.append(image9)
 
+width = getWidth(image1)
+height = getHeight(image1)
+
+newImage = makeEmptyPicture(width, height)
+
+redPixelList = []
+greenPixelList = []
+bluePixelList = []
+
+
+def median(list): #https://stackoverflow.com/questions/24101524/finding-median-of-list-in-python
+    sortedList = sorted(list)
+    listLength = len(list)
+    indexMedian = (listLength - 1) // 2
+
+    if (listLength % 2):
+        return sortedList[indexMedian]
+    else:
+        return (sortedList[indexMedian] + sortedList[indexMedian+1]) / 2.0
+
+
 for x in range(0, width):
     for y in range(0,height):
 
@@ -38,3 +59,22 @@ for x in range(0, width):
             redPixelList.append(red)
             greenPixelList.append(green)
             bluePixelList.append(blue)
+
+        # calculate median pixel
+        medianRed = median(redPixelList)
+        medianGreen = median(greenPixelList)
+        medianBlue = median(bluePixelList)
+
+        #this is the median pixel now
+        medianColor = makeColor(medianRed, medianGreen, medianBlue)
+
+        #get pixel from empty image
+        currentNewPixel = getPixel(newImage, x, y)
+
+        #set color of pixel
+        setColor(currentNewPixel, medianColor)
+        del redPixelList[:]
+        del greenPixelList[:]
+        del bluePixelList[:]
+
+writePictureTo(newImage, folder+"output.png")
